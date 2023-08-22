@@ -49,12 +49,6 @@ public class ProductController {
     }
 
 
-    @GetMapping("/products/{id}")
-    private Product singleProduct(@PathVariable int id){
-
-        return productService.findById(id);
-    }
-
     private User getCurrentUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
