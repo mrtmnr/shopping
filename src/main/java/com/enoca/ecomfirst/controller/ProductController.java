@@ -1,4 +1,5 @@
 package com.enoca.ecomfirst.controller;
+import com.enoca.ecomfirst.DTOs.ProductsDTO;
 import com.enoca.ecomfirst.Security.jwt.JwtUtils;
 import com.enoca.ecomfirst.entity.Cart;
 import com.enoca.ecomfirst.entity.Order;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.Socket;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/shop")
@@ -38,13 +40,15 @@ public class ProductController {
         this.userRepository=userRepository;
         this.orderRepository=orderRepository;
     }
-    //products list
-    @GetMapping("/products")
-    private List<Product>products(){
 
-      return productService.findAll();
+
+    @GetMapping("/products")
+    private List<ProductsDTO>products(){
+
+        return productService.findAll();
     }
-    //see the selected product
+
+
     @GetMapping("/products/{id}")
     private Product singleProduct(@PathVariable int id){
 
@@ -82,7 +86,7 @@ public class ProductController {
 
     //give order
     @PostMapping("/cart/buy")
-        public String buy(){
+    public String buy(){
         User user=getCurrentUser();
         Cart cart=user.getCart();
         List<Product>products=cart.getProducts();
@@ -91,7 +95,7 @@ public class ProductController {
                 {   int stock= n.getStock();
                     n.setStock(stock-1);
                 }
-                );
+        );
         Order order=new Order();
         order.setUser(user);
         order.setCart(cart);
@@ -101,10 +105,10 @@ public class ProductController {
     }
 
     @GetMapping("/cart")
-    public List<Product> displayCart(){
+    public List<ProductsDTO> displayCart(){
         User user= getCurrentUser();
-        return user.getCart().getProducts();
-
+        List<Product> products=user.getCart().getProducts();
+        return productService.fromEntityListToDTO(products);
     }
 
 }
