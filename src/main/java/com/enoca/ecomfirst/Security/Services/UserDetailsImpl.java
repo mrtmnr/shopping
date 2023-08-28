@@ -1,7 +1,7 @@
 package com.enoca.ecomfirst.Security.Services;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.enoca.ecomfirst.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

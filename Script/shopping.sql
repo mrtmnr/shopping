@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `shopping_with_jwt` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `shopping_with_jwt`;
+CREATE DATABASE  IF NOT EXISTS `shopping_entry1` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `shopping_entry1`;
 -- MySQL dump 10.13  Distrib 8.0.31, for macos12 (x86_64)
 --
--- Host: localhost    Database: shopping_with_jwt
+-- Host: localhost    Database: shopping_entry1
 -- ------------------------------------------------------
 -- Server version	8.0.31
 
@@ -40,29 +40,31 @@ LOCK TABLES `cart` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `cart_product`
+-- Table structure for table `cart_entry`
 --
 
-DROP TABLE IF EXISTS `cart_product`;
+DROP TABLE IF EXISTS `cart_entry`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `cart_product` (
-  `product_id` int NOT NULL,
-  `cart_id` int NOT NULL,
-  PRIMARY KEY (`product_id`,`cart_id`),
+CREATE TABLE `cart_entry` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `cart_id` int DEFAULT NULL,
+  `entry_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
   KEY `cart_id` (`cart_id`),
-  CONSTRAINT `cart_product_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
-  CONSTRAINT `cart_product_ibfk_2` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`id`)
+  KEY `entry_id` (`entry_id`),
+  CONSTRAINT `cart_entry_ibfk_1` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`id`),
+  CONSTRAINT `cart_entry_ibfk_2` FOREIGN KEY (`entry_id`) REFERENCES `entry` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `cart_product`
+-- Dumping data for table `cart_entry`
 --
 
-LOCK TABLES `cart_product` WRITE;
-/*!40000 ALTER TABLE `cart_product` DISABLE KEYS */;
-/*!40000 ALTER TABLE `cart_product` ENABLE KEYS */;
+LOCK TABLES `cart_entry` WRITE;
+/*!40000 ALTER TABLE `cart_entry` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cart_entry` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -90,6 +92,38 @@ INSERT INTO `category` VALUES (1,'book'),(2,'watch'),(3,'furniture'),(4,'food');
 UNLOCK TABLES;
 
 --
+-- Table structure for table `entry`
+--
+
+DROP TABLE IF EXISTS `entry`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `entry` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `order_id` int DEFAULT NULL,
+  `quantity` int DEFAULT NULL,
+  `product_id` int DEFAULT NULL,
+  `totalPrice` int DEFAULT NULL,
+  `discountPrice` int DEFAULT NULL,
+  `totalPriceWithDiscount` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `entry_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `shop_order` (`id`),
+  CONSTRAINT `entry_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `entry`
+--
+
+LOCK TABLES `entry` WRITE;
+/*!40000 ALTER TABLE `entry` DISABLE KEYS */;
+/*!40000 ALTER TABLE `entry` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `product`
 --
 
@@ -99,12 +133,10 @@ DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
   `id` int NOT NULL AUTO_INCREMENT,
   `category_id` int DEFAULT NULL,
-  `price` float NOT NULL,
+  `price` int DEFAULT NULL,
   `stock` int DEFAULT NULL,
   `title` varchar(55) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `category_id` (`category_id`),
-  CONSTRAINT `product_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -114,8 +146,37 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,1,50,30,'space theory'),(2,2,2500,50,'casio'),(3,3,3000,20,'sofa'),(4,4,10,20,'bread');
+INSERT INTO `product` VALUES (1,NULL,50,30,'dune'),(2,NULL,2500,50,'casio'),(3,NULL,3000,20,'sofa'),(4,NULL,10,15,'bread');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `product_category`
+--
+
+DROP TABLE IF EXISTS `product_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `product_category` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `product_id` int DEFAULT NULL,
+  `category_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`),
+  KEY `category_id` (`category_id`),
+  CONSTRAINT `product_category_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  CONSTRAINT `product_category_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `product_category`
+--
+
+LOCK TABLES `product_category` WRITE;
+/*!40000 ALTER TABLE `product_category` DISABLE KEYS */;
+INSERT INTO `product_category` VALUES (1,1,1),(2,2,2),(3,3,3),(4,4,4);
+/*!40000 ALTER TABLE `product_category` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -168,34 +229,6 @@ CREATE TABLE `shop_order` (
 LOCK TABLES `shop_order` WRITE;
 /*!40000 ALTER TABLE `shop_order` DISABLE KEYS */;
 /*!40000 ALTER TABLE `shop_order` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `shop_order_product`
---
-
-DROP TABLE IF EXISTS `shop_order_product`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `shop_order_product` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `order_id` int DEFAULT NULL,
-  `product_id` int DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `order_id` (`order_id`),
-  KEY `product_id` (`product_id`),
-  CONSTRAINT `shop_order_product_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `shop_order` (`id`),
-  CONSTRAINT `shop_order_product_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `shop_order_product`
---
-
-LOCK TABLES `shop_order_product` WRITE;
-/*!40000 ALTER TABLE `shop_order_product` DISABLE KEYS */;
-/*!40000 ALTER TABLE `shop_order_product` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -261,4 +294,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-08-21 13:58:30
+-- Dump completed on 2023-08-28 11:16:51

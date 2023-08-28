@@ -1,7 +1,6 @@
 package com.enoca.ecomfirst.entity;
 
 import jakarta.persistence.*;
-import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 
@@ -17,18 +16,13 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
-    @JoinTable(
-            name = "shop_order_product",
-            joinColumns=@JoinColumn(name = "order;_id"),
-            inverseJoinColumns=@JoinColumn(name = "product_id")
-    )
-
-    private List<Product>products;
-
     @OneToOne(cascade =CascadeType.ALL)
     @JoinColumn(name = "cart_id")
     private Cart cart;
+
+
+    @OneToMany(mappedBy = "order",fetch = FetchType.LAZY)
+    private List<Entry> entries;
 
     public Order() {
     }
@@ -49,14 +43,6 @@ public class Order {
         this.user = user;
     }
 
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
-
     public Cart getCart() {
         return cart;
     }
@@ -65,12 +51,19 @@ public class Order {
         this.cart = cart;
     }
 
+    public List<Entry> getEntries() {
+        return entries;
+    }
+
+    public void setEntries(List<Entry> entries) {
+        this.entries = entries;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
                 "id=" + id +
                 ", user=" + user +
-                ", products=" + products +
                 ", cart=" + cart +
                 '}';
     }

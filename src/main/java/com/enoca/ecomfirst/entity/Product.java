@@ -19,25 +19,16 @@ public class Product {
     @Column(name = "title")
     private String title;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
-    @JoinTable(
-            name = "cart_product",
-            joinColumns=@JoinColumn(name = "product_id"),
-            inverseJoinColumns=@JoinColumn(name = "cart_id")
-    )
-    private List<Cart>carts;
+    @OneToMany(mappedBy ="product" ,fetch = FetchType.LAZY)
+    private List<Entry> entries;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinTable(
-            name = "shop_order_product",
+            name = "product_category",
             joinColumns=@JoinColumn(name = "product_id"),
-            inverseJoinColumns=@JoinColumn(name = "order_id")
+            inverseJoinColumns=@JoinColumn(name = "category_id")
     )
-    private List<Order>orders;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_id")
-    private Category category;
+    private List<Category> categories;
 
     public Product() {
     }
@@ -80,43 +71,34 @@ public class Product {
         this.title = title;
     }
 
-    public List<Cart> getCarts() {
-        return carts;
+    public List<Category> getCategories() {
+        return categories;
     }
 
-    public void setCarts(List<Cart> carts) {
-        this.carts = carts;
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 
-    public List<Order> getOrders() {
-        return orders;
+    public List<Entry> getEntries() {
+        return entries;
     }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
+    public void setEntries(List<Entry> entries) {
+        this.entries = entries;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public void addCart(Cart cart){
-        if(carts==null){
-            carts=new ArrayList<Cart>();
+    public void addCategory(Category category){
+        if(categories==null){
+            categories=new ArrayList<Category>();
         }
-        carts.add(cart);
+        categories.add(category);
     }
 
-
-    public void addorder(Order order){
-        if(orders==null){
-            orders=new ArrayList<Order>();
+    public void addEntry(Entry entry){
+        if(entries==null){
+            entries=new ArrayList<Entry>();
         }
-        orders.add(order);
+        entries.add(entry);
     }
 
     @Override

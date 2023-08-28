@@ -1,8 +1,8 @@
 package com.enoca.ecomfirst.entity;
 
 import jakarta.persistence.*;
-import org.springframework.security.core.parameters.P;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,7 +17,12 @@ public class Category {
     private String title;
 
 
-    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(
+            name = "product_category",
+            joinColumns=@JoinColumn(name = "category_id"),
+            inverseJoinColumns=@JoinColumn(name = "product_id")
+    )
     private List<Product>products;
 
     public Category() {
@@ -50,6 +55,13 @@ public class Category {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public void addProduct(Product product){
+        if(products==null){
+            products=new ArrayList<Product>();
+        }
+        products.add(product);
     }
 
     @Override

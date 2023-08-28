@@ -1,8 +1,8 @@
 package com.enoca.ecomfirst.service;
 
 import com.enoca.ecomfirst.DTOs.ProductsDTO;
-import com.enoca.ecomfirst.repository.ProductRepository;
 import com.enoca.ecomfirst.entity.Product;
+import com.enoca.ecomfirst.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -4,25 +4,25 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
+@Table(name ="cart")
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="Id")
     private int id;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
-    @JoinTable(
-            name = "cart_product",
-            joinColumns=@JoinColumn(name = "cart_id"),
-            inverseJoinColumns=@JoinColumn(name = "product_id")
-    )
-    private List<Product>products;
-
     @OneToOne(mappedBy = "cart",cascade = {CascadeType.REFRESH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH})
     private User user;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(
+            name = "cart_entry",
+            joinColumns=@JoinColumn(name = "cart_id"),
+            inverseJoinColumns=@JoinColumn(name = "entry_id")
+    )
+    private List<Entry> entries;
 
     public Cart() {
 
@@ -45,29 +45,26 @@ public class Cart {
         this.user = user;
     }
 
-
-    public List<Product> getProducts() {
-        return products;
+    public List<Entry> getEntries() {
+        return entries;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setEntries(List<Entry> entries) {
+        this.entries = entries;
     }
 
-
-    public void addProduct(Product product){
-        if (products==null){
-            products=new ArrayList<Product>();
+    public void addEntry(Entry entry){
+        if (entries==null){
+            entries=new ArrayList<Entry>();
         }
-        products.add(product);
-
+        entries.add(entry);
     }
+
 
     @Override
     public String toString() {
         return "Cart{" +
                 "id=" + id +
-                ", products=" + products +
                 ", user=" + user +
                 '}';
     }
