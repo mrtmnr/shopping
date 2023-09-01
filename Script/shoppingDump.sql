@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `shopping_entry1` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `shopping_entry1`;
+CREATE DATABASE  IF NOT EXISTS `shopping` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `shopping`;
 -- MySQL dump 10.13  Distrib 8.0.31, for macos12 (x86_64)
 --
--- Host: localhost    Database: shopping_entry1
+-- Host: localhost    Database: shopping
 -- ------------------------------------------------------
 -- Server version	8.0.31
 
@@ -26,6 +26,7 @@ DROP TABLE IF EXISTS `cart`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cart` (
   `id` int NOT NULL AUTO_INCREMENT,
+  `cart_price` int DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -78,7 +79,7 @@ CREATE TABLE `category` (
   `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(55) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -87,8 +88,36 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (1,'book'),(2,'watch'),(3,'furniture'),(4,'food');
+INSERT INTO `category` VALUES (1,'product'),(2,'book'),(3,'watch'),(4,'furniture'),(5,'food');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `category_promotion`
+--
+
+DROP TABLE IF EXISTS `category_promotion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `category_promotion` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `category_id` int DEFAULT NULL,
+  `promotion_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `category_id` (`category_id`),
+  KEY `promotion_id` (`promotion_id`),
+  CONSTRAINT `category_promotion_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
+  CONSTRAINT `category_promotion_ibfk_2` FOREIGN KEY (`promotion_id`) REFERENCES `promotion` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `category_promotion`
+--
+
+LOCK TABLES `category_promotion` WRITE;
+/*!40000 ALTER TABLE `category_promotion` DISABLE KEYS */;
+/*!40000 ALTER TABLE `category_promotion` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -103,9 +132,9 @@ CREATE TABLE `entry` (
   `order_id` int DEFAULT NULL,
   `quantity` int DEFAULT NULL,
   `product_id` int DEFAULT NULL,
-  `totalPrice` int DEFAULT NULL,
-  `discountPrice` int DEFAULT NULL,
-  `totalPriceWithDiscount` int DEFAULT NULL,
+  `total_price` int DEFAULT NULL,
+  `change_of_price` int DEFAULT NULL,
+  `total_price_with_change` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `order_id` (`order_id`),
   KEY `product_id` (`product_id`),
@@ -166,7 +195,7 @@ CREATE TABLE `product_category` (
   KEY `category_id` (`category_id`),
   CONSTRAINT `product_category_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
   CONSTRAINT `product_category_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -175,8 +204,33 @@ CREATE TABLE `product_category` (
 
 LOCK TABLES `product_category` WRITE;
 /*!40000 ALTER TABLE `product_category` DISABLE KEYS */;
-INSERT INTO `product_category` VALUES (1,1,1),(2,2,2),(3,3,3),(4,4,4);
+INSERT INTO `product_category` VALUES (1,1,1),(2,2,1),(3,3,1),(4,4,1),(5,1,2),(6,2,3),(7,3,4),(8,4,5);
 /*!40000 ALTER TABLE `product_category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `promotion`
+--
+
+DROP TABLE IF EXISTS `promotion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `promotion` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `cart_limit` int DEFAULT NULL,
+  `discount` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `promotion`
+--
+
+LOCK TABLES `promotion` WRITE;
+/*!40000 ALTER TABLE `promotion` DISABLE KEYS */;
+INSERT INTO `promotion` VALUES (1,5000,500),(2,10000,1250);
+/*!40000 ALTER TABLE `promotion` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -212,13 +266,11 @@ DROP TABLE IF EXISTS `shop_order`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `shop_order` (
   `id` int NOT NULL AUTO_INCREMENT,
+  `order_price` int DEFAULT NULL,
   `user_id` int DEFAULT NULL,
-  `cart_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  KEY `cart_id` (`cart_id`),
-  CONSTRAINT `shop_order_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `shop_order_ibfk_2` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`id`)
+  CONSTRAINT `shop_order_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -294,4 +346,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-08-28 11:16:51
+-- Dump completed on 2023-09-01  9:56:29

@@ -15,10 +15,10 @@ public class Entry {
     private int quantity;
     @Column(name ="total_price")
     private int totalPrice;
-    @Column(name ="discount_price")
-    private int discountPrice;
-    @Column(name ="total_price_with_discount")
-    private int totalPriceWithDiscount;
+    @Column(name ="change_of_price")
+    private int changeOfPrice;
+    @Column(name ="total_price_with_change")
+    private int totalPriceWithChange;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
@@ -39,11 +39,11 @@ public class Entry {
     public Entry() {
     }
 
-    public Entry(int quantity, int totalPrice, int discountPrice, int getTotalPriceWithDiscount) {
+    public Entry(int quantity, int totalPrice, int changeOfPrice, int totalPriceWithChange) {
         this.quantity = quantity;
         this.totalPrice = totalPrice;
-        this.discountPrice = discountPrice;
-        this.totalPriceWithDiscount = totalPriceWithDiscount;
+        this.changeOfPrice = changeOfPrice;
+        this.totalPriceWithChange = totalPriceWithChange;
     }
 
     public int getId() {
@@ -70,20 +70,20 @@ public class Entry {
         this.totalPrice = totalPrice;
     }
 
-    public int getDiscountPrice() {
-        return discountPrice;
+    public int getChangeOfPrice() {
+        return changeOfPrice;
     }
 
-    public void setDiscountPrice(int discountPrice) {
-        this.discountPrice = discountPrice;
+    public void setChangeOfPrice(int changeOfPrice) {
+        this.changeOfPrice = changeOfPrice;
     }
 
-    public int getTotalPriceWithDiscount() {
-        return totalPriceWithDiscount;
+    public int getTotalPriceWithChange() {
+        return totalPriceWithChange;
     }
 
-    public void setTotalPriceWithDiscount(int totalPriceWithDiscount) {
-        this.totalPriceWithDiscount = totalPriceWithDiscount;
+    public void setTotalPriceWithChange(int totalPriceWithChange) {
+        this.totalPriceWithChange = totalPriceWithChange;
     }
 
     public Product getProduct() {
@@ -117,8 +117,8 @@ public class Entry {
                 "id=" + id +
                 ", quantity=" + quantity +
                 ", totalPrice=" + totalPrice +
-                ", discountPrice=" + discountPrice +
-                ", totalPriceWithDiscount=" + totalPriceWithDiscount +
+                ", discountPrice=" + changeOfPrice +
+                ", totalPriceWithDiscount=" + totalPriceWithChange +
                 ", product=" + product +
                 ", carts=" + carts +
                 ", order=" + order +

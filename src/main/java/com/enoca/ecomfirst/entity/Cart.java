@@ -13,6 +13,9 @@ public class Cart {
     @Column(name ="Id")
     private int id;
 
+    @Column(name ="cart_price")
+    private int cartPrice;
+
     @OneToOne(mappedBy = "cart",cascade = {CascadeType.REFRESH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH})
     private User user;
 
@@ -26,6 +29,9 @@ public class Cart {
 
     public Cart() {
 
+    }
+    public Cart(int cartPrice) {
+        this.cartPrice = cartPrice;
     }
 
     public int getId() {
@@ -51,6 +57,14 @@ public class Cart {
 
     public void setEntries(List<Entry> entries) {
         this.entries = entries;
+    }
+
+    public int getCartPrice() {
+        return cartPrice;
+    }
+
+    public void setCartPrice(int cartPrice) {
+        this.cartPrice = cartPrice;
     }
 
     public void addEntry(Entry entry){

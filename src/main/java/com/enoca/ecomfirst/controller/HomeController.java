@@ -1,4 +1,5 @@
 package com.enoca.ecomfirst.controller;
+
 import com.enoca.ecomfirst.DTOs.JwtResponse;
 import com.enoca.ecomfirst.DTOs.LoginRequest;
 import com.enoca.ecomfirst.DTOs.MessageResponse;
@@ -6,10 +7,10 @@ import com.enoca.ecomfirst.DTOs.SignupRequest;
 import com.enoca.ecomfirst.Enums.EnumRole;
 import com.enoca.ecomfirst.Security.Services.UserDetailsImpl;
 import com.enoca.ecomfirst.Security.jwt.JwtUtils;
-import com.enoca.ecomfirst.repository.RoleRepository;
-import com.enoca.ecomfirst.repository.UserRepository;
 import com.enoca.ecomfirst.entity.Role;
 import com.enoca.ecomfirst.entity.User;
+import com.enoca.ecomfirst.repository.RoleRepository;
+import com.enoca.ecomfirst.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -25,6 +25,15 @@ public class Category {
     )
     private List<Product>products;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(
+            name = "category_promotion",
+            joinColumns=@JoinColumn(name = "category_id"),
+            inverseJoinColumns=@JoinColumn(name = "promotion_id")
+    )
+    private List<Promotion> promotions;
+
+
     public Category() {
     }
 
@@ -55,6 +64,14 @@ public class Category {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public List<Promotion> getPromotions() {
+        return promotions;
+    }
+
+    public void setPromotions(List<Promotion> promotions) {
+        this.promotions = promotions;
     }
 
     public void addProduct(Product product){

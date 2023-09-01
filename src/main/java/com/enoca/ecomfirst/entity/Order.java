@@ -12,14 +12,11 @@ public class Order {
     @Column(name = "id")
     private int id;
 
+    @Column(name = "order_price")
+    private int orderPrice;
     @ManyToOne(cascade ={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
     private User user;
-
-    @OneToOne(cascade =CascadeType.ALL)
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
-
 
     @OneToMany(mappedBy = "order",fetch = FetchType.LAZY)
     private List<Entry> entries;
@@ -35,20 +32,20 @@ public class Order {
         this.id = id;
     }
 
+    public int getOrderPrice() {
+        return orderPrice;
+    }
+
+    public void setOrderPrice(int orderPrice) {
+        this.orderPrice = orderPrice;
+    }
+
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
     }
 
     public List<Entry> getEntries() {
@@ -64,7 +61,6 @@ public class Order {
         return "Order{" +
                 "id=" + id +
                 ", user=" + user +
-                ", cart=" + cart +
                 '}';
     }
 }
