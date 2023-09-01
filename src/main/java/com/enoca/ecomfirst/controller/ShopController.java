@@ -131,16 +131,19 @@ public class ShopController {
         int chance=priceChange.getChange();
         Product product=productService.findById(productId);
         int firstPrice=product.getPrice();
-        List<Entry>entries=NoOrderEntry();
+        List<Entry>entries=entryService.findAll();
         entries.forEach((entry)->
-                    {   if (entry.getProduct().getId()==productId) {
+                {
+                    if (entry.getOrder()==null){
+                        if (entry.getProduct().getId()==productId) {
 
                             entry.setTotalPrice(firstPrice);
                             entry.setChangeOfPrice(chance);
                             entry.setTotalPriceWithChange(firstPrice + chance);
-                          }
+                        }
                     }
-                );
+                }
+        );
         int newPrice=firstPrice+chance;
         product.setPrice(newPrice);
         productService.save(product);
@@ -183,10 +186,6 @@ public class ShopController {
                 {   int stock= ent.getProduct().getStock();
                     ent.getProduct().setStock(stock-1);
                     ent.setOrder(order);
-                    //default totalPrice saving when price has not changed yet
-                    if (ent.getTotalPrice()==0){
-                        ent.setTotalPrice(ent.getProduct().getPrice());
-                    }
                 }
         );
 
